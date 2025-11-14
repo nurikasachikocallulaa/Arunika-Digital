@@ -1,0 +1,148 @@
+========================================
+   LANGKAH PENTING - BACA INI!
+========================================
+
+MASALAH: Error "The image failed to upload"
+PENYEBAB: Apache belum membaca konfigurasi PHP yang baru
+
+========================================
+   SOLUSI - IKUTI URUTAN INI:
+========================================
+
+STEP 1: CEK PHPINFO
+-------------------
+1. Buka browser
+2. Buka: http://localhost/galery_sachi/public/phpinfo-check.php
+3. Tekan Ctrl+F, cari "upload_max_filesize"
+4. Lihat nilainya:
+   - Jika masih 2M → Apache belum restart dengan benar
+   - Jika sudah 20M → Lanjut ke step berikutnya
+
+5. Cari juga "Loaded Configuration File"
+   - Catat path php.ini yang digunakan
+   - Contoh: C:\xampp\php\php.ini
+
+
+STEP 2: RESTART APACHE DENGAN BENAR
+------------------------------------
+1. Buka XAMPP Control Panel
+2. Klik "Stop" pada Apache
+3. TUNGGU sampai status berubah jadi "Stopped" (5-10 detik)
+4. Klik "Start" pada Apache
+5. TUNGGU sampai status "Running" (hijau)
+
+
+STEP 3: CEK LAGI PHPINFO
+-------------------------
+1. Refresh halaman: http://localhost/galery_sachi/public/phpinfo-check.php
+2. Cari "upload_max_filesize" lagi
+3. HARUS sudah 20M atau 20971520 bytes
+
+
+STEP 4: JIKA MASIH 2M, EDIT PHP.INI MANUAL
+-------------------------------------------
+1. Buka XAMPP Control Panel
+2. Klik "Config" di sebelah Apache
+3. Pilih "PHP (php.ini)"
+4. Cari baris ini (Ctrl+F):
+   
+   upload_max_filesize = 2M
+   
+5. Ubah jadi:
+   
+   upload_max_filesize = 20M
+   
+6. Cari juga:
+   
+   post_max_size = 8M
+   
+7. Ubah jadi:
+   
+   post_max_size = 25M
+
+8. PENTING: Hapus tanda ; di depan baris jika ada!
+   
+   Contoh SALAH:
+   ;upload_max_filesize = 20M
+   
+   Contoh BENAR:
+   upload_max_filesize = 20M
+
+9. Simpan file (Ctrl+S)
+10. Tutup editor
+11. Restart Apache (Stop → Start)
+12. Tunggu 5 detik
+13. Cek phpinfo lagi
+
+
+STEP 5: TEST UPLOAD
+--------------------
+1. Buka: http://localhost/galery_sachi/public/test-upload.php
+2. Pilih foto (2-5MB)
+3. Klik "Upload Test File"
+4. Harus berhasil dengan pesan hijau
+
+
+STEP 6: TEST DI APLIKASI
+-------------------------
+1. Clear browser cache (Ctrl+Shift+Delete)
+2. Login admin
+3. Galeri → Tambah Galeri
+4. Upload foto (2-5MB)
+5. Isi judul dan kategori
+6. Klik Simpan
+7. HARUS BERHASIL!
+
+
+========================================
+   JIKA MASIH GAGAL:
+========================================
+
+OPSI A: Restart Komputer
+-------------------------
+Kadang Windows perlu restart penuh agar PHP membaca konfigurasi baru.
+
+1. Restart komputer
+2. Buka XAMPP Control Panel
+3. Start Apache
+4. Test upload lagi
+
+
+OPSI B: Cek PHP Version
+------------------------
+1. Buka Command Prompt
+2. Ketik: php -v
+3. Lihat versinya (harus PHP 8.x)
+4. Jika berbeda dengan Apache, ada masalah instalasi
+
+
+OPSI C: Cek Apache Error Log
+-----------------------------
+1. Buka: C:\xampp\apache\logs\error.log
+2. Scroll ke bawah (error terbaru)
+3. Lihat ada error apa
+4. Screenshot dan tanyakan
+
+
+========================================
+   FILE YANG HARUS DIHAPUS SETELAH SELESAI:
+========================================
+
+PENTING! Hapus file ini untuk keamanan:
+- public/phpinfo-check.php
+- public/test-upload.php
+- public/check-php-limits.php
+
+
+========================================
+   KONTAK BANTUAN:
+========================================
+
+Jika semua cara sudah dicoba tapi masih gagal:
+1. Screenshot error yang muncul
+2. Screenshot phpinfo (bagian upload_max_filesize)
+3. Screenshot XAMPP Control Panel (Apache running)
+4. Kirim semua screenshot
+
+
+========================================

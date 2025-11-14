@@ -1,0 +1,154 @@
+========================================
+   MASALAH UPLOAD FOTO MASIH GAGAL!
+========================================
+
+ERROR: "The image failed to upload"
+
+PENYEBAB:
+Apache belum membaca konfigurasi PHP yang baru!
+PHP upload limits masih 2M/8M (terlalu kecil)
+
+========================================
+   SOLUSI - IKUTI STEP BY STEP:
+========================================
+
+STEP 1: CEK PHPINFO
+-------------------
+Saya sudah buka halaman:
+http://localhost/galery_sachi/public/phpinfo-check.php
+
+LIHAT DI HALAMAN ITU:
+1. Cari "upload_max_filesize"
+2. Lihat nilainya:
+   - Jika masih 2M → APACHE BELUM RESTART!
+   - Jika sudah 20M → Lanjut step berikutnya
+
+
+STEP 2: RESTART APACHE (PENTING!)
+----------------------------------
+1. Buka XAMPP Control Panel
+2. Klik "Stop" pada Apache
+3. TUNGGU 10 DETIK (jangan buru-buru!)
+4. Klik "Start" pada Apache
+5. Tunggu sampai status "Running" (hijau)
+
+
+STEP 3: CEK LAGI PHPINFO
+-------------------------
+1. Refresh halaman phpinfo-check.php
+2. Cari "upload_max_filesize"
+3. HARUS SUDAH 20M!
+
+Jika masih 2M, lanjut ke STEP 4.
+
+
+STEP 4: EDIT PHP.INI MANUAL
+----------------------------
+1. XAMPP Control Panel
+2. Klik "Config" (di sebelah Apache)
+3. Pilih "PHP (php.ini)"
+4. Cari baris (Ctrl+F):
+   
+   upload_max_filesize
+   
+5. Ubah dari:
+   
+   upload_max_filesize = 2M
+   
+   Jadi:
+   
+   upload_max_filesize = 20M
+
+6. Cari juga:
+   
+   post_max_size
+   
+7. Ubah dari:
+   
+   post_max_size = 8M
+   
+   Jadi:
+   
+   post_max_size = 25M
+
+8. PENTING: Hapus tanda ; di depan jika ada!
+   
+   SALAH: ;upload_max_filesize = 20M
+   BENAR: upload_max_filesize = 20M
+
+9. Simpan (Ctrl+S)
+10. Tutup editor
+11. RESTART APACHE LAGI!
+
+
+STEP 5: VERIFIKASI
+-------------------
+1. Refresh phpinfo-check.php
+2. upload_max_filesize HARUS 20M
+3. post_max_size HARUS 25M
+
+
+STEP 6: TEST UPLOAD
+--------------------
+1. Buka: http://localhost/galery_sachi/public/test-upload.php
+2. Upload foto 2-5MB
+3. Harus berhasil!
+
+
+STEP 7: TEST DI APLIKASI
+-------------------------
+1. Clear browser cache (Ctrl+Shift+Delete)
+2. Login admin
+3. Galeri → Tambah Galeri
+4. Upload foto (2-5MB)
+5. HARUS BERHASIL!
+
+
+========================================
+   JIKA MASIH GAGAL:
+========================================
+
+OPSI 1: RESTART KOMPUTER
+-------------------------
+Kadang Windows perlu restart penuh.
+
+1. Restart komputer
+2. Start Apache di XAMPP
+3. Cek phpinfo lagi
+4. Test upload
+
+
+OPSI 2: CEK ERROR LOG
+----------------------
+Buka: storage\logs\laravel.log
+Lihat error terakhir, kirim ke saya
+
+
+OPSI 3: SCREENSHOT
+------------------
+Screenshot halaman phpinfo-check.php
+Kirim ke saya untuk analisa
+
+
+========================================
+   CHECKLIST:
+========================================
+
+[ ] Buka phpinfo-check.php
+[ ] Lihat upload_max_filesize (harus 20M)
+[ ] Restart Apache (Stop → Tunggu → Start)
+[ ] Cek phpinfo lagi (harus 20M)
+[ ] Jika masih 2M, edit php.ini manual
+[ ] Restart Apache lagi
+[ ] Test di test-upload.php
+[ ] Test di aplikasi
+
+
+========================================
+
+INGAT: Masalahnya BUKAN di format foto!
+Masalahnya di PHP upload limits yang masih terlalu kecil!
+
+Setelah phpinfo menunjukkan 20M, upload PASTI berhasil!
+
+========================================
