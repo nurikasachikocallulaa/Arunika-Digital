@@ -19,17 +19,28 @@
             <!-- Email -->
             <div>
                 <label class="block font-medium mb-2 text-gray-700">Email</label>
-                <input type="email" name="email"
-                       class="w-full border-0 border-b-2 border-gray-200 px-1 py-2.5 text-gray-700 bg-transparent focus:outline-none focus:ring-0 focus:border-blue-500 transition-colors peer"
+                <input type="email" name="email" value="{{ old('email') }}"
+                       class="w-full border-0 border-b-2 px-1 py-2.5 text-gray-700 bg-transparent focus:outline-none focus:ring-0 transition-colors peer {{ $errors->has('email') ? 'border-red-500' : 'border-gray-200 focus:border-blue-500' }}"
                        placeholder="contoh@email.com" required autofocus>
+                @error('email')
+                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                @enderror
             </div>
 
             <!-- Password -->
             <div>
                 <label class="block font-medium mb-2 text-gray-700">Password</label>
-                <input type="password" name="password"
-                       class="w-full border-0 border-b-2 border-gray-200 px-1 py-2.5 text-gray-700 bg-transparent focus:outline-none focus:ring-0 focus:border-blue-500 transition-colors peer"
-                       placeholder="••••••••" required>
+                <div class="relative">
+                    <input id="password" type="password" name="password"
+                           class="w-full border-0 border-b-2 px-1 py-2.5 pr-10 text-gray-700 bg-transparent focus:outline-none focus:ring-0 transition-colors peer {{ $errors->has('password') ? 'border-red-500' : 'border-gray-200 focus:border-blue-500' }}"
+                           placeholder="••••••••" required>
+                    <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center text-gray-500 text-xs">
+                        Lihat
+                    </button>
+                </div>
+                @error('password')
+                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                @enderror
             </div>
 
             <!-- Remember -->
@@ -61,4 +72,18 @@
         </form>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const passwordInput = document.getElementById('password');
+        const toggleButton = document.getElementById('togglePassword');
+
+        if (passwordInput && toggleButton) {
+            toggleButton.addEventListener('click', function () {
+                const isHidden = passwordInput.type === 'password';
+                passwordInput.type = isHidden ? 'text' : 'password';
+                toggleButton.textContent = isHidden ? 'Sembunyi' : 'Lihat';
+            });
+        }
+    });
+</script>
 @endsection

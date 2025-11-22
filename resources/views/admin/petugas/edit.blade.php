@@ -24,21 +24,9 @@
         </div>
 
         <div class="mb-3">
-            <label class="block text-sm font-medium mb-1">No HP</label>
-            <input type="text" name="no_hp" value="{{ old('no_hp', $petuga->no_hp) }}" class="w-full border rounded px-3 py-2 text-sm">
-            @error('no_hp')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
-        </div>
-
-        <div class="mb-3">
             <label class="block text-sm font-medium mb-1">Email</label>
             <input type="email" name="email" value="{{ old('email', $petuga->email) }}" class="w-full border rounded px-3 py-2 text-sm">
             @error('email')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
-        </div>
-
-        <div class="mb-4">
-            <label class="block text-sm font-medium mb-1">Alamat</label>
-            <textarea name="alamat" rows="3" class="w-full border rounded px-3 py-2 text-sm">{{ old('alamat', $petuga->alamat) }}</textarea>
-            @error('alamat')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
         </div>
 
         <div class="flex items-center gap-2">

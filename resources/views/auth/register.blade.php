@@ -38,19 +38,29 @@
             <!-- Password -->
             <div>
                 <label class="block font-medium mb-2 text-gray-700">Password</label>
-                <input type="password" 
-                       name="password" 
-                       class="w-full border-0 border-b-2 border-gray-200 px-1 py-2.5 text-gray-700 bg-transparent focus:outline-none focus:ring-0 focus:border-blue-500 transition-colors" 
-                       required>
+                <div class="relative">
+                    <input id="reg_password" type="password" 
+                           name="password" 
+                           class="w-full border-0 border-b-2 border-gray-200 px-1 py-2.5 pr-10 text-gray-700 bg-transparent focus:outline-none focus:ring-0 focus:border-blue-500 transition-colors" 
+                           required>
+                    <button type="button" id="toggleRegPassword" class="absolute inset-y-0 right-0 flex items-center text-gray-500 text-xs">
+                        Lihat
+                    </button>
+                </div>
             </div>
 
             <!-- Confirm Password -->
             <div>
                 <label class="block font-medium mb-2 text-gray-700">Konfirmasi Password</label>
-                <input type="password" 
-                       name="password_confirmation" 
-                       class="w-full border-0 border-b-2 border-gray-200 px-1 py-2.5 text-gray-700 bg-transparent focus:outline-none focus:ring-0 focus:border-blue-500 transition-colors" 
-                       required>
+                <div class="relative">
+                    <input id="reg_password_confirmation" type="password" 
+                           name="password_confirmation" 
+                           class="w-full border-0 border-b-2 border-gray-200 px-1 py-2.5 pr-10 text-gray-700 bg-transparent focus:outline-none focus:ring-0 focus:border-blue-500 transition-colors" 
+                           required>
+                    <button type="button" id="toggleRegPasswordConfirmation" class="absolute inset-y-0 right-0 flex items-center text-gray-500 text-xs">
+                        Lihat
+                    </button>
+                </div>
             </div>
 
             <!-- Register Button -->
@@ -69,4 +79,29 @@
             </div>
         </form>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordInput = document.getElementById('reg_password');
+            const togglePassword = document.getElementById('toggleRegPassword');
+            const confirmInput = document.getElementById('reg_password_confirmation');
+            const toggleConfirm = document.getElementById('toggleRegPasswordConfirmation');
+
+            if (passwordInput && togglePassword) {
+                togglePassword.addEventListener('click', function () {
+                    const isHidden = passwordInput.type === 'password';
+                    passwordInput.type = isHidden ? 'text' : 'password';
+                    togglePassword.textContent = isHidden ? 'Sembunyi' : 'Lihat';
+                });
+            }
+
+            if (confirmInput && toggleConfirm) {
+                toggleConfirm.addEventListener('click', function () {
+                    const isHidden = confirmInput.type === 'password';
+                    confirmInput.type = isHidden ? 'text' : 'password';
+                    toggleConfirm.textContent = isHidden ? 'Sembunyi' : 'Lihat';
+                });
+            }
+        });
+    </script>
 @endsection

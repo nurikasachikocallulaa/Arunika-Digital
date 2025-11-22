@@ -23,21 +23,20 @@
         </div>
 
         <div class="mb-3">
-            <label class="block text-sm font-medium mb-1">No HP</label>
-            <input type="text" name="no_hp" value="{{ old('no_hp') }}" class="w-full border rounded px-3 py-2 text-sm">
-            @error('no_hp')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
-        </div>
-
-        <div class="mb-3">
-            <label class="block text-sm font-medium mb-1">Email</label>
-            <input type="email" name="email" value="{{ old('email') }}" class="w-full border rounded px-3 py-2 text-sm">
+            <label class="block text-sm font-medium mb-1">Email<span class="text-red-500">*</span></label>
+            <input type="email" name="email" value="{{ old('email') }}" class="w-full border rounded px-3 py-2 text-sm" required>
             @error('email')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
         </div>
 
-        <div class="mb-4">
-            <label class="block text-sm font-medium mb-1">Alamat</label>
-            <textarea name="alamat" rows="3" class="w-full border rounded px-3 py-2 text-sm">{{ old('alamat') }}</textarea>
-            @error('alamat')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
+        <div class="mb-3">
+            <label class="block text-sm font-medium mb-1">Password Akun Login<span class="text-red-500">*</span></label>
+            <input type="password" name="password" class="w-full border rounded px-3 py-2 text-sm" required>
+            @error('password')<p class="text-red-600 text-xs mt-1">{{ $message }}</p>@enderror
+        </div>
+
+        <div class="mb-3">
+            <label class="block text-sm font-medium mb-1">Konfirmasi Password<span class="text-red-500">*</span></label>
+            <input type="password" name="password_confirmation" class="w-full border rounded px-3 py-2 text-sm" required>
         </div>
 
         <div class="flex items-center gap-2">

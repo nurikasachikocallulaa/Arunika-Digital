@@ -14,13 +14,49 @@
         <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">{{ session('success') }}</div>
     @endif
 
+    @if(isset($pendingUsers) && $pendingUsers->count())
+        <div class="bg-white shadow rounded overflow-hidden mb-6">
+            <div class="px-4 py-2 bg-yellow-100 border-b border-yellow-200 font-semibold">
+                Pengajuan Petugas Menunggu Persetujuan
+            </div>
+            <table class="min-w-full text-left text-sm">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-2">Nama</th>
+                        <th class="px-4 py-2">Email</th>
+                        <th class="px-4 py-2">Status</th>
+                        <th class="px-4 py-2">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($pendingUsers as $user)
+                        <tr class="border-t">
+                            <td class="px-4 py-2">{{ $user->name }}</td>
+                            <td class="px-4 py-2">{{ $user->email }}</td>
+                            <td class="px-4 py-2 capitalize">{{ $user->status }}</td>
+                            <td class="px-4 py-2 flex gap-2">
+                                <form action="{{ route('admin.petugas.approve', $user->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="px-3 py-1 text-xs bg-green-600 text-white rounded">Terima</button>
+                                </form>
+                                <form action="{{ route('admin.petugas.reject', $user->id) }}" method="POST" onsubmit="return confirm('Tolak pengajuan petugas ini?');">
+                                    @csrf
+                                    <button type="submit" class="px-3 py-1 text-xs bg-red-600 text-white rounded">Tolak</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
+
     <div class="bg-white shadow rounded overflow-hidden">
         <table class="min-w-full text-left text-sm">
             <thead class="bg-gray-100">
                 <tr>
                     <th class="px-4 py-2">Nama</th>
                     <th class="px-4 py-2">Jabatan</th>
-                    <th class="px-4 py-2">No HP</th>
                     <th class="px-4 py-2">Email</th>
                     <th class="px-4 py-2">Aksi</th>
                 </tr>
@@ -30,7 +66,6 @@
                     <tr class="border-t">
                         <td class="px-4 py-2">{{ $p->nama }}</td>
                         <td class="px-4 py-2">{{ $p->jabatan }}</td>
-                        <td class="px-4 py-2">{{ $p->no_hp }}</td>
                         <td class="px-4 py-2">{{ $p->email }}</td>
                         <td class="px-4 py-2 flex gap-2">
                             <a href="{{ route('admin.petugas.edit', $p->id) }}" class="px-3 py-1 text-xs bg-yellow-400 text-white rounded">Edit</a>

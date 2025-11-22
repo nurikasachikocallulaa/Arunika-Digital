@@ -64,6 +64,8 @@ Route::middleware(['auth', 'verified', PreventBackHistory::class])->group(functi
     // Petugas (Admin)
     Route::resource('admin/petugas', AdminPetugasController::class)->names('admin.petugas');
     Route::get('/petugas', [AdminPetugasController::class, 'index'])->name('petugas.index');
+    Route::post('admin/petugas/{id}/approve', [AdminPetugasController::class, 'approveUser'])->name('admin.petugas.approve');
+    Route::post('admin/petugas/{id}/reject', [AdminPetugasController::class, 'rejectUser'])->name('admin.petugas.reject');
 
     
     // Admin: Manage Gallery Comments
