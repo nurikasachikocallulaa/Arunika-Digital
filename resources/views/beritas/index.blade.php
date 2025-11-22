@@ -1,7 +1,7 @@
 @extends('layouts.admin_new')
 
 @section('title', 'Berita')
-@section('page-title', 'Manajemen Berita')
+@section('page-title', 'Berita')
 
 @push('styles')
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -38,28 +38,21 @@
 
 @section('content')
 <div class="space-y-6">
-    <!-- Header Section -->
-    <div class="p-1">
-        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 rounded-2xl shadow-xl">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                <div class="mb-4 md:mb-0 flex items-start">
-                    <div class="mr-4 hidden sm:flex items-center justify-center w-12 h-12 rounded-xl bg-white/20 text-white shadow-inner">
-                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6M9 8h6M5 7a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V7z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h2 class="text-2xl md:text-3xl font-bold text-white mb-1">Manajemen Berita</h2>
-                        <p class="text-blue-100 text-sm md:text-base">Kelola konten berita dan artikel sekolah</p>
-                    </div>
-                </div>
-                <a href="{{ route('beritas.create') }}" class="inline-flex items-center justify-center px-5 py-3 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-300 hover:from-blue-600 hover:to-indigo-700">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6" />
-                    </svg>
-                    Buat Berita Baru
-                </a>
-            </div>
+    <!-- Header Section (seragam dengan galeri & kategori) -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-2">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800">Manajemen Berita</h2>
+            <p class="text-gray-500 text-sm">Kelola berita dan artikel informasi sekolah dengan tampilan yang rapi.</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
+                <i class="fas fa-newspaper mr-2"></i>
+                Total: {{ $beritas->total() }} berita
+            </span>
+            <a href="{{ route('beritas.create') }}" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl shadow-sm text-sm font-semibold transition">
+                <i class="fas fa-plus mr-2"></i>
+                Buat Berita Baru
+            </a>
         </div>
     </div>
 
@@ -74,19 +67,10 @@
     </div>
     @endif
 
-    <!-- Filter Only -->
-    <div class="bg-white p-4 rounded-xl shadow">
-        <div class="flex items-center justify-end">
-            <div class="flex items-center space-x-2">
-                <span class="text-sm text-gray-600">Urutkan:</span>
-                <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-                    <option>Terbaru</option>
-                    <option>Terlama</option>
-                    <option>A-Z</option>
-                    <option>Z-A</option>
-                </select>
-            </div>
-        </div>
+    <!-- Filter (opsional, simple) -->
+    <div class="bg-white p-4 rounded-xl shadow flex items-center justify-between">
+        <p class="text-sm text-gray-600">Daftar berita terbaru.</p>
+        {{-- Tempat filter lanjutan jika nanti dibutuhkan --}}
     </div>
 
     @if($beritas->count() > 0)

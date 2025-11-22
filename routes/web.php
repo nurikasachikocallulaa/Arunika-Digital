@@ -8,10 +8,13 @@ use App\Http\Controllers\GuestGalleryController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\GalleryLikeController;
 use App\Http\Controllers\GalleryCommentController;
+use App\Http\Controllers\Admin\PetugasController as AdminPetugasController;
+use App\Http\Middleware\PreventBackHistory;
 use Illuminate\Support\Facades\Route;
 
 // Guest/Home
 Route::get('/', [GuestController::class, 'home'])->name('guest.home');
+Route::get('/search', [GuestController::class, 'search'])->name('guest.search');
 Route::get('/berita', [GuestController::class, 'berita'])->name('guest.berita');
 Route::get('/berita/{id}', [GuestController::class, 'showBerita'])->name('guest.berita.show'); // detail
 Route::get('/profil', [GuestController::class, 'profil'])->name('guest.profil');
@@ -42,7 +45,7 @@ Route::middleware('auth')->group(function() {
 });
 
 // Admin (dashboard & CRUD)
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', PreventBackHistory::class])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -58,8 +61,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('beritas', BeritaController::class);
     Route::resource('visitss', VisitController::class);
 
-    // Petugas
-    Route::get('/petugas', function() { return view('petugas.index'); })->name('petugas.index');
+    // Petugas (Admin)
+    Route::resource('admin/petugas', AdminPetugasController::class)->names('admin.petugas');
+    Route::get('/petugas', [AdminPetugasController::class, 'index'])->name('petugas.index');
 
     
     // Admin: Manage Gallery Comments

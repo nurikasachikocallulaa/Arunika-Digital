@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.admin_new')
 
 @section('title','Tambah Galeri')
 @section('page-title','Tambah Galeri')

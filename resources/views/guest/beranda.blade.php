@@ -417,7 +417,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </h3>
                 <div class="w-full h-[400px] rounded-b-lg overflow-hidden">
                     <iframe 
-                        src="{{ $siteSettings->map_embed ?? 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.049882521692!2d106.82211897364498!3d-6.640728064914838!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69c8b16ee07ef5%3A0x14ab253dd267de49!2sSMK%20Negeri%204%20Bogor%20(Nebrazka)!5e0!3m2!1sid!2sid!4v1763079992486!5m2!1sid!2sid' }}" 
+                        src="{{ $siteSettings->map_embed ?? 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d253635.1897317708!2d106.53630278671872!3d-6.640733399999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69c8b16ee07ef5%3A0x14ab253dd267de49!2sSMK%20Negeri%204%20Bogor%20(Nebrazka)!5e0!3m2!1sid!2sid!4v1763427493502!5m2!1sid!2sid' }}" 
                         width="100%" 
                         height="100%" 
                         style="border:0;" 

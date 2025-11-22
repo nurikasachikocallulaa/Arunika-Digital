@@ -28,7 +28,7 @@ class BeritaController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required',
-            'image' => 'required|image|max:2048',
+            'image' => 'required|image',
         ]);
 
         try {
@@ -63,13 +63,12 @@ class BeritaController extends Controller
             $data = $request->validate([
                 'title' => 'required|string|max:255',
                 'content' => 'required',
-                'image' => 'nullable|image|max:2048',
+                'image' => 'nullable|image',
                 'remove_image' => 'sometimes|boolean'
             ], [
                 'title.required' => 'Judul berita harus diisi',
                 'content.required' => 'Konten berita harus diisi',
                 'image.image' => 'File harus berupa gambar',
-                'image.max' => 'Ukuran gambar maksimal 2MB'
             ]);
 
             // Handle image removal if requested

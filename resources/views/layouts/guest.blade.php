@@ -40,7 +40,7 @@
     <!-- Navbar (Floating Full-Width) -->
     <nav class="fixed top-0 left-0 right-0 z-50">
         <div class="mx-auto px-4 md:px-6">
-            <div class="flex items-center justify-between gap-4 bg-gradient-to-br from-blue-600 via-sky-500 to-indigo-600 text-white shadow-md px-4 py-3 md:px-6 md:py-3 rounded-full ring-1 ring-white/10">
+            <div class="flex items-center justify-between gap-4 bg-gradient-to-br from-blue-800 via-sky-700 to-indigo-800 text-white shadow-md px-4 py-3 md:px-6 md:py-3 rounded-full ring-1 ring-white/10">
             <div class="flex items-center space-x-3">
                 <img src="{{ asset('images/logo.jpeg') }}" alt="Logo SMK Negeri 4 Bogor" class="h-10 w-10 object-contain">
                 <div class="flex flex-col">
@@ -54,7 +54,14 @@
                 <a href="{{ route('guest.home') }}#profil" class="text-white/90 hover:text-white font-semibold transition">Profil</a>
                 <a href="{{ route('guest.home') }}#berita" class="text-white/90 hover:text-white font-semibold transition">Berita</a>
                 <a href="{{ route('guest.home') }}#galeri" class="text-white/90 hover:text-white font-semibold transition">Galeri</a>
-                <a href="{{ route('login') }}" class="bg-white text-blue-700 px-4 py-2 rounded-lg shadow hover:bg-blue-50 transition">Login</a>
+                <a href="{{ route('guest.home') }}#kontak" class="text-white/90 hover:text-white font-semibold transition">Kontak</a>
+
+                <form action="{{ route('guest.search') }}" method="GET" class="flex items-center bg-white/10 rounded-full px-3 py-1 border border-white/20 text-sm">
+                    <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari..." class="bg-transparent border-none focus:outline-none text-white placeholder-white/70 w-40">
+                    <button type="submit" class="ml-2 text-white/90 hover:text-white">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
             </div>
 
             <!-- Hamburger Mobile -->
@@ -65,14 +72,18 @@
         </div>
 
         <!-- Mobile Menu (Dropdown full-width) -->
-        <div id="mobile-menu" class="hidden md:hidden bg-gradient-to-br from-blue-600 via-sky-500 to-indigo-600 text-white border-t border-blue-600/40 shadow-lg px-4 py-3 space-y-2 rounded-xl mx-4 md:mx-6">
+        <div id="mobile-menu" class="hidden md:hidden bg-gradient-to-br from-blue-800 via-sky-700 to-indigo-800 text-white border-t border-blue-700/50 shadow-lg px-4 py-3 space-y-2 rounded-xl mx-4 md:mx-6">
             <a href="{{ route('guest.home') }}#beranda" class="block text-white/90 hover:text-white py-2 transition">Beranda</a>
             <a href="{{ route('guest.home') }}#profil" class="block text-white/90 hover:text-white py-2 transition">Profil</a>
             <a href="{{ route('guest.home') }}#berita" class="block text-white/90 hover:text-white py-2 transition">Berita</a>
             <a href="{{ route('guest.home') }}#galeri" class="block text-white/90 hover:text-white py-2 transition">Galeri</a>
-            <a href="{{ route('login') }}" class="block bg-white text-blue-700 text-center px-4 py-2 rounded-lg shadow hover:bg-blue-50 transition mt-2">
-                Login
-            </a>
+            <a href="{{ route('guest.home') }}#kontak" class="block text-white/90 hover:text-white py-2 transition">Kontak</a>
+            <form action="{{ route('guest.search') }}" method="GET" class="mt-2 flex items-center gap-2 bg-white/10 rounded-lg px-3 py-2 border border-white/20 text-sm">
+                <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari..." class="flex-1 bg-transparent border-none focus:outline-none text-white placeholder-white/70">
+                <button type="submit" class="text-white/90 hover:text-white">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
         </div>
     </nav>
 
@@ -87,7 +98,7 @@
     </main>
 
 <!-- Footer (Blue-Sky-Indigo gradient, modern clean) -->
-<footer class="relative bg-gradient-to-br from-blue-600 via-sky-500 to-indigo-600 text-white mt-12">
+<footer class="relative bg-gradient-to-br from-blue-900 via-sky-800 to-indigo-900 text-white mt-12">
     <div class="max-w-7xl mx-auto px-6 py-12">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <!-- Brand -->
@@ -118,6 +129,7 @@
                     <li><a class="flex items-center gap-2 text-white/90 hover:text-white" href="{{ route('guest.profil') }}"><i class="fas fa-chevron-right text-xs"></i> Profil Sekolah</a></li>
                     <li><a class="flex items-center gap-2 text-white/90 hover:text-white" href="{{ route('guest.berita') }}"><i class="fas fa-chevron-right text-xs"></i> Berita & Artikel</a></li>
                     <li><a class="flex items-center gap-2 text-white/90 hover:text-white" href="{{ route('guest.galeri') }}"><i class="fas fa-chevron-right text-xs"></i> Galeri Foto</a></li>
+                    <li><a class="flex items-center gap-2 text-white/90 hover:text-white" href="{{ route('guest.kontak') }}"><i class="fas fa-chevron-right text-xs"></i> Kontak & Lokasi</a></li>
                 </ul>
             </div>
 

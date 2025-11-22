@@ -4,52 +4,128 @@
 @section('page-title', 'Galeri')
 
 @section('content')
-<div class="mb-4">
-    <a href="{{ route('galleries.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Tambah Galeri</a>
+
+<!-- Header & Actions -->
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+    <div>
+        <h2 class="text-2xl font-bold text-gray-800">Manajemen Galeri</h2>
+        <p class="text-gray-500 text-sm">Kelola foto-foto terbaik SMKN 4 Bogor dengan tampilan yang lebih modern.</p>
+    </div>
+    <div class="flex items-center gap-3">
+        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
+            <i class="fas fa-images mr-2"></i>
+            Total: {{ $galleries->total() }} foto
+        </span>
+        <a href="{{ route('galleries.create') }}" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl shadow-sm text-sm font-semibold transition">
+            <i class="fas fa-plus mr-2"></i>
+            Tambah Galeri
+        </a>
+    </div>
 </div>
 
 @if(session('success'))
-<div class="bg-green-200 text-green-800 p-3 rounded mb-4">{{ session('success') }}</div>
+<div class="mb-5 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800 flex items-center gap-2">
+    <i class="fas fa-check-circle"></i>
+    <span>{{ session('success') }}</span>
+</div>
 @endif
 
-<div class="grid grid-cols-3 gap-6">
-    @foreach($galleries as $gallery)
-    <div class="bg-white rounded-lg shadow overflow-hidden">
-        <img src="{{ asset('storage/' . $gallery->image) }}" class="w-full h-48 object-cover">
-        <div class="p-4">
-            <h3 class="font-bold text-lg mb-2">{{ $gallery->title }}</h3>
-            <p class="text-sm text-gray-600 mb-3">{{ $gallery->category->name ?? 'Tanpa Kategori' }}</p>
-            
-            <!-- Like & Comment Stats -->
-            <div class="flex items-center gap-4 text-sm text-gray-600 mb-3 pb-3 border-b">
-                <div class="flex items-center gap-1">
-                    <i class="fas fa-heart text-red-500"></i>
-                    <span>{{ $gallery->likes_count ?? 0 }} Likes</span>
+@if($galleries->count() === 0)
+    <div class="bg-white rounded-2xl border border-dashed border-gray-200 py-12 flex flex-col items-center justify-center text-center">
+        <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mb-4">
+            <i class="fas fa-images text-blue-500 text-2xl"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-800 mb-1">Belum ada foto galeri</h3>
+        <p class="text-sm text-gray-500 mb-4 max-w-md">Mulai dokumentasikan momen kegiatan sekolah dengan menambahkan foto-foto terbaik ke dalam galeri.</p>
+        <a href="{{ route('galleries.create') }}" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-sm">
+            <i class="fas fa-plus mr-2"></i>
+            Tambah Foto Pertama
+        </a>
+    </div>
+@else
+    <!-- Gallery Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        @foreach($galleries as $gallery)
+        <div class="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+            <div class="relative overflow-hidden">
+                <img src="{{ asset('storage/' . $gallery->image) }}" 
+                     class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                <!-- Top badges -->
+                <div class="absolute top-3 left-3 flex flex-wrap gap-2">
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-white/90 text-gray-800">
+                        <i class="fas fa-tag mr-1 text-blue-500"></i>
+                        {{ $gallery->category->name ?? 'Tanpa Kategori' }}
+                    </span>
                 </div>
-                <button onclick="showComments({{ $gallery->id }}, '{{ $gallery->title }}')" 
-                        class="flex items-center gap-1 hover:text-blue-700 transition cursor-pointer">
-                    <i class="fas fa-comment text-blue-500"></i>
-                    <span class="font-semibold">{{ $gallery->comments_count ?? 0 }} Komentar</span>
-                </button>
+
+                <!-- Quick action: Edit & Hapus di pojok kanan atas gambar -->
+                <div class="absolute top-3 right-3 flex items-center gap-2">
+                    <a href="{{ route('galleries.edit', $gallery->id) }}" class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/90 hover:bg-yellow-100 text-yellow-700 shadow-sm transition" title="Edit foto">
+                        <i class="fas fa-edit text-sm"></i>
+                    </a>
+                    <form action="{{ route('galleries.destroy', $gallery->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus galeri ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/90 hover:bg-red-100 text-red-600 shadow-sm transition" title="Hapus foto">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Stats overlay -->
+                <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div class="flex items-center gap-3 bg-black/40 rounded-full px-3 py-1">
+                        <span class="inline-flex items-center gap-1">
+                            <i class="fas fa-heart text-red-400"></i>
+                            <span>{{ $gallery->likes_count ?? 0 }} Like</span>
+                        </span>
+                        <button type="button" onclick="showComments({{ $gallery->id }}, '{{ $gallery->title }}')" class="inline-flex items-center gap-1 hover:text-blue-200">
+                            <i class="fas fa-comment"></i>
+                            <span>{{ $gallery->comments_count ?? 0 }} Komentar</span>
+                        </button>
+                    </div>
+                </div>
             </div>
-            
-            <div class="mt-2 flex justify-between items-center">
-                <a href="{{ route('galleries.show', $gallery->id) }}" class="text-blue-600 hover:underline">Detail</a>
-                <a href="{{ route('galleries.edit', $gallery->id) }}" class="text-yellow-600 hover:underline">Edit</a>
-                <form action="{{ route('galleries.destroy', $gallery->id) }}" method="POST" onsubmit="return confirm('Yakin ingin hapus?')">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="text-red-600 hover:underline">Hapus</button>
-                </form>
+
+            <div class="p-4 flex flex-col h-full">
+                <h3 class="font-semibold text-gray-900 text-sm mb-1 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                    {{ $gallery->title }}
+                </h3>
+                <p class="text-xs text-gray-500 mb-3">
+                    Diunggah: {{ $gallery->created_at ? $gallery->created_at->format('d M Y') : '-' }}
+                </p>
+
+                <div class="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between gap-2 text-xs">
+                    <div class="flex items-center gap-2">
+                        <a href="{{ route('galleries.show', $gallery->id) }}" class="inline-flex items-center px-2.5 py-1 rounded-full bg-gray-50 hover:bg-gray-100 text-gray-700 font-medium transition">
+                            <i class="fas fa-eye mr-1"></i>
+                            Detail
+                        </a>
+                        <a href="{{ route('galleries.edit', $gallery->id) }}" class="inline-flex items-center px-2.5 py-1 rounded-full bg-yellow-50 hover:bg-yellow-100 text-yellow-700 font-medium transition">
+                            <i class="fas fa-edit mr-1"></i>
+                            Edit
+                        </a>
+                    </div>
+                    <form action="{{ route('galleries.destroy', $gallery->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus galeri ini?')" class="ml-2">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="inline-flex items-center px-2.5 py-1 rounded-full bg-red-50 hover:bg-red-100 text-red-600 font-medium transition">
+                            <i class="fas fa-trash mr-1"></i>
+                            Hapus
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
+        @endforeach
     </div>
-    @endforeach
-</div>
 
-<div class="mt-6">
-    {{ $galleries->links() }}
-</div>
+    <div class="mt-6">
+        {{ $galleries->links() }}
+    </div>
+@endif
 
 <!-- Modal Komentar -->
 <div id="commentsModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">

@@ -4,13 +4,7 @@
 @section('page-title', 'Edit Berita: ' . Str::limit($berita->title, 30))
 
 @push('styles')
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <style>
-    .ql-editor {
-        min-height: 200px;
-        font-size: 16px;
-        line-height: 1.6;
-    }
     .image-preview {
         max-width: 100%;
         height: auto;
@@ -18,23 +12,12 @@
         border-radius: 0.5rem;
         border: 2px dashed #e2e8f0;
     }
-</style>
-@endpush
-
-@push('styles')
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<style>
-    .ql-editor {
-        min-height: 200px;
-        font-size: 16px;
-        line-height: 1.6;
-    }
-    .image-preview {
+    .drop-zone {
         max-width: 100%;
         height: auto;
-        margin-top: 1rem;
         border-radius: 0.5rem;
-        border: 2px dashed #e2e8f0;
+        border: 2px solid #e2e8f0;
+        margin-bottom: 1rem;
     }
     .current-image {
         max-width: 100%;
@@ -167,7 +150,7 @@
                         </label>
                         <p class="pl-1">atau drag and drop</p>
                     </div>
-                    <p class="text-xs text-gray-500">PNG, JPG, JPEG (Maks. 5MB)</p>
+                    <p class="text-xs text-gray-500">PNG, JPG, JPEG</p>
                 </div>
             </div>
             
@@ -189,8 +172,12 @@
         <!-- Konten -->
         <div class="mb-8">
             <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Isi Berita <span class="text-red-500">*</span></label>
-            <div id="editor" style="min-height: 300px;">{!! old('content', $berita->content) !!}</div>
-            <textarea name="content" id="content" class="hidden">{!! old('content', $berita->content) !!}</textarea>
+            <textarea
+                name="content"
+                id="content"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 min-h-[250px]"
+                placeholder="Tulis isi berita di sini..."
+            >{{ old('content', $berita->content) }}</textarea>
         </div>
 
         <!-- Action Buttons -->
@@ -221,60 +208,16 @@
 @endsection
 
 @push('scripts')
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
-    // Initialize Quill editor
-    const quill = new Quill('#editor', {
-        theme: 'snow',
-        placeholder: 'Tulis isi berita di sini...',
-        modules: {
-            toolbar: [
-                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                [{ 'script': 'sub'}, { 'script': 'super' }],
-                [{ 'indent': '-1'}, { 'indent': '+1' }],
-                ['link', 'image', 'video'],
-                ['clean'],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'align': [] }],
-            ]
-        },
-    });
-
-    // Set initial content from textarea
-    const contentTextarea = document.querySelector('textarea#content');
-    if (contentTextarea && contentTextarea.value) {
-        quill.clipboard.dangerouslyPasteHTML(contentTextarea.value);
-    }
-
-    // Update textarea on form submit and any editor change
-    const form = document.querySelector('form');
-    form.onsubmit = function(e) {
-        const content = document.querySelector('#content');
-        content.value = quill.root.innerHTML;
-        
-        // Debug: Log the content to console
-        console.log('Content being saved:', content.value);
-    };
-    
-    // Also update on editor change
-    quill.on('text-change', function() {
-        const content = document.querySelector('#content');
-        content.value = quill.root.innerHTML;
-    });
-    
-    // Debug: Log initial content
-    console.log('Initial content:', quill.root.innerHTML);
-
-    // Image upload handling
+    // Image upload & delete handling (tanpa Quill)
     const dropZone = document.getElementById('dropZone');
     const fileInput = document.getElementById('image-upload');
     const imagePreview = document.getElementById('imagePreview');
     const showUploadSection = document.getElementById('showUploadSection');
     const removeImageBtn = document.getElementById('removeImage');
     const removeImageInput = document.getElementById('removeImageInput');
-    const currentImageContainer = document.querySelector('.current-image')?.parentElement?.parentElement;
+    const currentImageElement = document.querySelector('.current-image');
+    const currentImageContainer = currentImageElement ? currentImageElement.parentElement.parentElement : null;
 
     // Toggle upload section
     if (showUploadSection) {
@@ -288,7 +231,9 @@
     if (removeImageBtn && removeImageInput && currentImageContainer) {
         removeImageBtn.addEventListener('click', function() {
             currentImageContainer.remove();
-            dropZone.classList.remove('hidden');
+            if (dropZone) {
+                dropZone.classList.remove('hidden');
+            }
             removeImageInput.value = '1';
         });
     }

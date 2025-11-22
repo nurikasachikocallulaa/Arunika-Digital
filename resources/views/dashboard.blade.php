@@ -482,6 +482,19 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Update current time clock
+    const timeElement = document.getElementById('current-time');
+    if (timeElement) {
+        const updateTime = () => {
+            const now = new Date();
+            const options = { hour12: false }; // 24-hour format
+            const timeString = now.toLocaleTimeString('id-ID', options);
+            timeElement.textContent = timeString;
+        };
+        updateTime();
+        setInterval(updateTime, 1000);
+    }
+
     // Initialize chart with empty data
     const ctx = document.getElementById('visitorChart').getContext('2d');
     let chart = new Chart(ctx, {

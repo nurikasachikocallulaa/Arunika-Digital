@@ -11,9 +11,13 @@
 
     <!-- Kategori -->
     <div class="mb-6 flex flex-wrap gap-3 justify-center">
+        <a href="{{ url('/galeri') }}"
+           class="px-4 py-2 rounded-full transition font-medium {{ request('kategori') ? 'bg-blue-50 text-blue-700 hover:bg-blue-100' : 'bg-blue-600 text-white hover:bg-blue-700' }}">
+           Semua
+        </a>
         @foreach($categories as $cat)
             <a href="{{ url('/galeri?kategori='.$cat->id) }}"
-               class="px-4 py-2 bg-blue-50 text-blue-700 rounded-full hover:bg-blue-100 transition font-medium">
+               class="px-4 py-2 rounded-full transition font-medium {{ request('kategori') == $cat->id ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-blue-50 text-blue-700 hover:bg-blue-100' }}">
                {{ $cat->name }}
             </a>
         @endforeach
@@ -21,6 +25,76 @@
     
     <!-- Galeri - Simple Clean Style -->
     @if($galleries->count() > 0)
+        @if(!request('kategori'))
+            @php
+                $groupedGalleries = $galleries->groupBy(function($item) {
+                    return optional($item->category)->name ?? 'Tanpa Kategori';
+                });
+            @endphp
+
+            @foreach($groupedGalleries as $groupName => $items)
+                <h2 class="text-2xl font-semibold mt-8 mb-4 text-gray-800 text-left">{{ $groupName }}</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    @foreach($items as $gallery)
+                        <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition overflow-hidden">
+                            <!-- Image Container with Double Tap -->
+                            <div class="relative group cursor-pointer" 
+                                 ondblclick="doubleTapLike({{ $gallery->id }})"
+                                 onclick="showInstagramComments({{ $gallery->id }})">
+                                @if($gallery->image)
+                                    <img src="{{ asset('storage/'.$gallery->image) }}"
+                                         alt="{{ $gallery->title }}"
+                                         class="w-full h-64 object-cover"
+                                         id="img-{{ $gallery->id }}">
+                                @else
+                                    <div class="w-full h-64 bg-gray-200 flex items-center justify-center text-gray-400">
+                                        <i class="fas fa-image text-4xl"></i>
+                                    </div>
+                                @endif
+                                
+                                <!-- Double Tap Heart Animation -->
+                                <div id="heart-animation-{{ $gallery->id }}" 
+                                     class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
+                                    <i class="fas fa-heart text-white text-8xl drop-shadow-lg"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- Gallery Info -->
+                            <div class="p-4">
+                                <!-- Title -->
+                                <h3 class="font-bold text-gray-800 text-lg mb-1">{{ $gallery->title }}</h3>
+                                
+                                <!-- Category -->
+                                <p class="text-gray-600 text-sm mb-3">{{ $gallery->category->name ?? 'Tanpa Kategori' }}</p>
+                                
+                                <!-- Like & Comment Stats (Clickable) -->
+                                <div class="flex items-center gap-4 text-sm">
+                                    <button onclick="event.stopPropagation(); toggleLike({{ $gallery->id }})" 
+                                            class="flex items-center gap-1 hover:text-red-500 transition"
+                                            id="like-btn-{{ $gallery->id }}">
+                                        <i class="far fa-heart text-red-500" id="like-icon-{{ $gallery->id }}"></i>
+                                        <span class="text-gray-700" id="like-count-{{ $gallery->id }}">{{ $gallery->likes_count ?? 0 }} Likes</span>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); showInstagramComments({{ $gallery->id }})" 
+                                            class="flex items-center gap-1 hover:text-blue-500 transition">
+                                        <i class="far fa-comment text-blue-500"></i>
+                                        <span class="text-gray-700" id="comment-count-display-{{ $gallery->id }}">{{ $gallery->comments_count ?? 0 }} Komentar</span>
+                                    </button>
+                                    @if($gallery->image)
+                                    <a href="{{ route('guest.galeri.download', $gallery->id) }}" 
+                                       onclick="event.stopPropagation();"
+                                       class="flex items-center gap-1 hover:text-green-500 transition ml-auto"
+                                       title="Download Foto">
+                                        <i class="fas fa-download text-green-600"></i>
+                                    </a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endforeach
+        @else
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             @foreach($galleries as $gallery)
                 <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition overflow-hidden">
@@ -80,6 +154,7 @@
                 </div>
             @endforeach
         </div>
+        @endif
 
         <!-- Pagination -->
         <div class="mt-8 flex justify-center">

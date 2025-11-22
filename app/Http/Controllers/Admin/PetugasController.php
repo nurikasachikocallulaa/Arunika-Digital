@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Petugas;
 
 class PetugasController extends Controller
 {
@@ -12,7 +13,8 @@ class PetugasController extends Controller
      */
     public function index()
     {
-        //
+        $petugas = Petugas::orderBy('nama')->paginate(10);
+        return view('admin.petugas.index', compact('petugas'));
     }
 
     /**
@@ -20,7 +22,7 @@ class PetugasController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.petugas.create');
     }
 
     /**
@@ -28,7 +30,19 @@ class PetugasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'nama'    => ['required', 'string', 'max:255'],
+            'jabatan' => ['required', 'string', 'max:255'],
+            'no_hp'   => ['nullable', 'string', 'max:50'],
+            'email'   => ['nullable', 'email', 'max:255'],
+            'alamat'  => ['nullable', 'string'],
+        ]);
+
+        Petugas::create($data);
+
+        return redirect()
+            ->route('admin.petugas.index')
+            ->with('success', 'Petugas berhasil ditambahkan.');
     }
 
     /**
@@ -44,7 +58,8 @@ class PetugasController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $petuga = Petugas::findOrFail($id);
+        return view('admin.petugas.edit', compact('petuga'));
     }
 
     /**
@@ -52,7 +67,20 @@ class PetugasController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = $request->validate([
+            'nama'    => ['required', 'string', 'max:255'],
+            'jabatan' => ['required', 'string', 'max:255'],
+            'no_hp'   => ['nullable', 'string', 'max:50'],
+            'email'   => ['nullable', 'email', 'max:255'],
+            'alamat'  => ['nullable', 'string'],
+        ]);
+
+        $petuga = Petugas::findOrFail($id);
+        $petuga->update($data);
+
+        return redirect()
+            ->route('admin.petugas.index')
+            ->with('success', 'Data petugas berhasil diperbarui.');
     }
 
     /**
@@ -60,6 +88,11 @@ class PetugasController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $petuga = Petugas::findOrFail($id);
+        $petuga->delete();
+
+        return redirect()
+            ->route('admin.petugas.index')
+            ->with('success', 'Petugas berhasil dihapus.');
     }
 }

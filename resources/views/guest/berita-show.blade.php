@@ -68,7 +68,7 @@
     <!-- Content -->
     <div class="prose max-w-none">
         <div class="text-gray-700 leading-relaxed text-base md:text-lg">
-            {!! nl2br(e($berita->content)) !!}
+            {!! $berita->content !!}
         </div>
     </div>
 

@@ -70,4 +70,57 @@ class GuestController extends Controller
     public function kontak() {
         return view('guest.kontak');
     }
+
+    public function search(Request $request)
+    {
+        $query = trim($request->get('q', ''));
+
+        // Shortcut untuk kata kunci tertentu -> redirect ke halaman utama terkait
+        if ($query !== '') {
+            $lower = mb_strtolower($query, 'UTF-8');
+
+            if (in_array($lower, ['galeri', 'gallery', 'galery', 'galeri foto'])) {
+                return redirect()->route('guest.galeri');
+            }
+
+            if (in_array($lower, ['berita', 'news'])) {
+                return redirect()->route('guest.berita');
+            }
+
+            if (in_array($lower, ['profil', 'profile', 'tentang', 'tentang kami'])) {
+                return redirect()->route('guest.profil');
+            }
+
+            if (in_array($lower, ['kontak', 'contact', 'hubungi', 'hubungi kami'])) {
+                return redirect()->route('guest.kontak');
+            }
+
+            if (in_array($lower, ['home', 'beranda', 'smkn 4', 'smkn4'])) {
+                return redirect()->route('guest.home');
+            }
+        }
+
+        $beritaResults = collect();
+        $galleryResults = collect();
+
+        if ($query !== '') {
+            $beritaResults = Berita::where('title', 'like', "%{$query}%")
+                ->orWhere('content', 'like', "%{$query}%")
+                ->latest()
+                ->take(10)
+                ->get();
+
+            $galleryResults = Gallery::where('title', 'like', "%{$query}%")
+                ->orWhere('description', 'like', "%{$query}%")
+                ->latest()
+                ->take(12)
+                ->get();
+        }
+
+        return view('guest.search', [
+            'query' => $query,
+            'beritaResults' => $beritaResults,
+            'galleryResults' => $galleryResults,
+        ]);
+    }
 }
