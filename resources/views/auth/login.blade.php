@@ -34,8 +34,8 @@
                     <input id="password" type="password" name="password"
                            class="w-full border-0 border-b-2 px-1 py-2.5 pr-10 text-gray-700 bg-transparent focus:outline-none focus:ring-0 transition-colors peer {{ $errors->has('password') ? 'border-red-500' : 'border-gray-200 focus:border-blue-500' }}"
                            placeholder="••••••••" required>
-                    <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center text-gray-500 text-xs">
-                        Lihat
+                    <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 flex items-center pr-1 text-gray-500">
+                        <i class="fas fa-eye text-sm" id="togglePasswordIcon"></i>
                     </button>
                 </div>
                 @error('password')
@@ -45,14 +45,11 @@
 
             <!-- Remember -->
             <div class="flex items-center justify-between">
-                <label class="flex items-center text-gray-600 text-sm cursor-pointer">
-                    <div class="relative inline-block w-10 mr-2 align-middle select-none">
-                        <input type="checkbox" name="remember" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer transition-all duration-200 ease-in-out" />
-                        <label for="remember" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
-                    </div>
+                <label class="flex items-center text-gray-600 text-sm cursor-pointer gap-2">
+                    <input type="checkbox" name="remember" class="h-4 w-4 border-gray-300 rounded focus:ring-blue-500">
                     <span class="text-sm">Ingat saya</span>
                 </label>
-                <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">Lupa password?</a>
+                <a href="{{ route('password.request') }}" class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">Lupa password?</a>
             </div>
 
             <!-- Tombol Login -->
@@ -76,12 +73,22 @@
     document.addEventListener('DOMContentLoaded', function () {
         const passwordInput = document.getElementById('password');
         const toggleButton = document.getElementById('togglePassword');
+        const toggleIcon = document.getElementById('togglePasswordIcon');
 
-        if (passwordInput && toggleButton) {
-            toggleButton.addEventListener('click', function () {
+        if (passwordInput && toggleButton && toggleIcon) {
+            toggleButton.addEventListener('click', function (e) {
+                e.preventDefault();
+
                 const isHidden = passwordInput.type === 'password';
                 passwordInput.type = isHidden ? 'text' : 'password';
-                toggleButton.textContent = isHidden ? 'Sembunyi' : 'Lihat';
+
+                if (isHidden) {
+                    toggleIcon.classList.remove('fa-eye');
+                    toggleIcon.classList.add('fa-eye-slash');
+                } else {
+                    toggleIcon.classList.remove('fa-eye-slash');
+                    toggleIcon.classList.add('fa-eye');
+                }
             });
         }
     });
