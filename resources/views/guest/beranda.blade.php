@@ -28,26 +28,34 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <!-- Hero Section with Slideshow Background -->
-<section id="beranda" class="min-h-screen flex items-center justify-center text-white relative overflow-hidden">
-    <!-- Slideshow background images -->
-    <img src="{{ asset('images/hero-1.jpg') }}" alt="Hero 1" class="absolute inset-0 w-full h-full object-cover slideshow-bg opacity-100 transition-opacity duration-1000">
-    <img src="{{ asset('images/hero-2.jpg') }}" alt="Hero 2" class="absolute inset-0 w-full h-full object-cover slideshow-bg opacity-0 transition-opacity duration-1000">
-    <!-- Overlay for readability -->
-    <div class="absolute inset-0 bg-gradient-to-br from-blue-900/40 via-indigo-900/30 to-purple-900/40"></div>
-    <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        <h1 class="text-4xl md:text-6xl font-bold mb-6 opacity-0 translate-y-4 transition duration-500 ease-out" data-reveal data-delay="0">
-            Selamat Datang di SMKN 4 BOGOR
-        </h1>
-        <p class="text-lg md:text-xl mb-8 text-blue-100 leading-relaxed opacity-0 translate-y-4 transition duration-500 ease-out" data-reveal data-delay="60">
-            Pendidikan Unggul, Masa Depan Gemilang - Tempat di mana inovasi dan tradisi bersatu untuk membentuk generasi pemimpin masa depan.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#galeri" class="bg-white text-blue-900 px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-gray-100 transition transform hover:scale-105 opacity-0 translate-y-4 transition duration-500 ease-out" data-reveal data-delay="120">
-                Jelajahi Galeri
-            </a>
-            <a href="#profil" class="bg-white text-blue-900 px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-gray-100 transition transform hover:scale-105 opacity-0 translate-y-4 transition duration-500 ease-out" data-reveal data-delay="180">
-                Tentang Kami
-            </a>
+<section id="beranda" class="min-h-[70vh] flex items-center justify-center text-white relative overflow-hidden">
+    <div class="w-full max-w-7xl mx-auto px-6 relative">
+        <!-- Slideshow background images (dibatasi lebar) -->
+        <div class="relative rounded-3xl overflow-hidden min-h-[70vh]">
+            <img src="{{ asset('images/hero-1.jpg') }}" alt="Hero 1" class="absolute inset-0 w-full h-full object-cover slideshow-bg opacity-100 transition-opacity duration-1000">
+            <img src="{{ asset('images/hero-2.jpg') }}" alt="Hero 2" class="absolute inset-0 w-full h-full object-cover slideshow-bg opacity-0 transition-opacity duration-1000">
+            <!-- Overlay for readability -->
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-900/40 via-indigo-900/30 to-purple-900/40"></div>
+        </div>
+
+        <!-- Text content centered on top of the image -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div class="text-center px-6 max-w-4xl mx-auto pointer-events-auto">
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 opacity-0 translate-y-4 transition duration-500 ease-out" data-reveal data-delay="0">
+                    Selamat Datang di SMKN 4 BOGOR
+                </h1>
+                <p class="text-lg md:text-xl mb-8 text-blue-100 leading-relaxed opacity-0 translate-y-4 transition duration-500 ease-out" data-reveal data-delay="60">
+                    Pendidikan Unggul, Masa Depan Gemilang - Tempat di mana inovasi dan tradisi bersatu untuk membentuk generasi pemimpin masa depan.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#galeri" class="bg-white text-blue-900 px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-gray-100 transition transform hover:scale-105 opacity-0 translate-y-4 transition duration-500 ease-out" data-reveal data-delay="120">
+                        Jelajahi Galeri
+                    </a>
+                    <a href="#profil" class="bg-white text-blue-900 px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-gray-100 transition transform hover:scale-105 opacity-0 translate-y-4 transition duration-500 ease-out" data-reveal data-delay="180">
+                        Tentang Kami
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -177,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <!-- News Grid -->
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             @foreach($latestBeritas as $berita)
-            <div class="group bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer opacity-0 translate-y-4 transition duration-500 ease-out" data-reveal data-delay="{{ $loop->iteration * 80 }}">
+            <div class="group bg-white rounded-2xl overflow-hidden border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 transition-all duration-300 transform hover:scale-105 cursor-pointer opacity-0 translate-y-4 transition duration-500 ease-out" data-reveal data-delay="{{ $loop->iteration * 80 }}">
                 <!-- Image with Overlay -->
                 <div class="relative overflow-hidden h-56">
                     @if($berita->image)
@@ -196,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <!-- Date Badge -->
                     <div class="absolute top-4 left-4 bg-white/95 px-3 py-2 rounded-lg shadow">
                         <div class="flex items-center gap-2">
-                            <i class="fas fa-calendar-alt text-gray-600 text-sm"></i>
+                            <i class="fas fa-calendar-alt text-gray-600 text-xs"></i>
                             <span class="text-xs font-semibold text-gray-800">{{ $berita->created_at->format('d M Y') }}</span>
                         </div>
                     </div>
@@ -269,8 +277,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <!-- Card -->
                 <div class="relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl border border-gray-100 hover:border-purple-200 transition-all duration-300 transform hover:scale-105 hover:-translate-y-2 opacity-0 translate-y-4 transition duration-500 ease-out" data-reveal data-delay="{{ $loop->iteration * 80 }}">
                     <!-- Image Container -->
-                    <div class="relative aspect-square overflow-hidden cursor-pointer"
-                         onclick="event.stopPropagation(); openLightbox('{{ asset('storage/'.$gallery->image) }}', '{{ $gallery->title }}', '{{ $gallery->created_at->format('d M Y') }}')">
+                    <div class="relative aspect-square overflow-hidden cursor-pointer">
                         @if($gallery->image)
                             <img src="{{ asset('storage/'.$gallery->image) }}"
                                  alt="{{ $gallery->title }}"
@@ -292,37 +299,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <span>{{ $gallery->created_at->format('d M Y') }}</span>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <!-- Zoom Icon -->
-                        <div class="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-0 group-hover:scale-100 shadow-lg">
-                            <i class="fas fa-search-plus text-white text-sm"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- Stats Bar -->
-                    <div class="p-4 bg-gradient-to-r from-gray-50 to-blue-50">
-                        <div class="flex items-center justify-between text-sm">
-                            <a href="{{ route('guest.galeri.show', $gallery->id) }}" 
-                               class="flex items-center gap-2 text-pink-600 hover:text-pink-700 transition font-semibold"
-                               onclick="event.stopPropagation()">
-                                <i class="fas fa-heart"></i>
-                                <span>{{ $gallery->likes_count ?? 0 }}</span>
-                            </a>
-                            
-                            <a href="{{ route('guest.galeri.show', $gallery->id) }}" 
-                               class="flex items-center gap-2 text-blue-600 hover:text-blue-700 transition font-semibold"
-                               onclick="event.stopPropagation()">
-                                <i class="fas fa-comment"></i>
-                                <span>{{ $gallery->comments_count ?? 0 }}</span>
-                            </a>
-                            
-                            <a href="{{ route('guest.galeri.show', $gallery->id) }}" 
-                               class="flex items-center gap-2 text-purple-600 hover:text-purple-700 transition font-semibold"
-                               onclick="event.stopPropagation()">
-                                <i class="fas fa-eye"></i>
-                                <span class="text-xs">Lihat</span>
-                            </a>
                         </div>
                     </div>
                 </div>
@@ -448,7 +424,35 @@ document.addEventListener('DOMContentLoaded', function() {
             <!-- Image Info -->
             <div class="p-4 bg-white">
                 <h3 id="lightbox-title" class="text-xl font-bold text-gray-800 mb-2"></h3>
-                <p id="lightbox-date" class="text-gray-600 text-sm"></p>
+                <p id="lightbox-date" class="text-gray-600 text-sm mb-3"></p>
+                
+                <!-- Like & Comment in Lightbox -->
+                <div class="flex items-center gap-4 text-sm border-t pt-3">
+                    @auth
+                        <button onclick="event.stopPropagation(); toggleLike(window.currentGalleryId)" 
+                                class="flex items-center gap-2 hover:text-red-500 transition"
+                                id="lightbox-like-btn">
+                            <i class="far fa-heart" id="lightbox-like-icon"></i>
+                            <span id="lightbox-like-count">0</span>
+                        </button>
+                        <button onclick="event.stopPropagation(); window.location.href = '{{ url('/galeri/') }}/' + window.currentGalleryId + '#comments'" 
+                                class="flex items-center gap-2 hover:text-blue-500 transition">
+                            <i class="far fa-comment"></i>
+                            <span id="lightbox-comment-count">0</span>
+                        </button>
+                    @else
+                        <button onclick="event.stopPropagation(); window.location='{{ route('login') }}'" 
+                                class="flex items-center gap-2 hover:text-red-500 transition">
+                            <i class="far fa-heart"></i>
+                            <span id="lightbox-like-count">0</span>
+                        </button>
+                        <button onclick="event.stopPropagation(); window.location='{{ route('login') }}'" 
+                                class="flex items-center gap-2 hover:text-blue-500 transition">
+                            <i class="far fa-comment"></i>
+                            <span id="lightbox-comment-count">0</span>
+                        </button>
+                    @endauth
+                </div>
             </div>
         </div>
     </div>
@@ -509,11 +513,16 @@ html {
 
 <script>
 // Lightbox functionality
-function openLightbox(imageSrc, title, date) {
+let currentGalleryId = 0;
+
+function openLightbox(imageSrc, title, date, galleryId) {
     const lightbox = document.getElementById('lightbox');
     const lightboxImage = document.getElementById('lightbox-image');
     const lightboxTitle = document.getElementById('lightbox-title');
     const lightboxDate = document.getElementById('lightbox-date');
+    
+    // Simpan ID galeri yang sedang dibuka
+    window.currentGalleryId = galleryId;
     
     lightboxImage.src = imageSrc;
     lightboxImage.alt = title;

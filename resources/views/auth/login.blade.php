@@ -58,11 +58,11 @@
                 Login
             </button>
 
-            <!-- Register -->
+            <!-- Register Admin -->
             <div class="mt-8 text-center">
-                <p class="text-sm text-gray-500">Belum punya akun?</p>
-                <a href="{{ route('register') }}" class="inline-block mt-2 px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
-                    Buat Akun Baru <i class="fas fa-arrow-right ml-1"></i>
+                <p class="text-sm text-gray-500">Belum punya akun admin?</p>
+                <a href="{{ route('admin.register') }}" class="inline-block mt-2 px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
+                    Daftar Akun Admin <i class="fas fa-arrow-right ml-1"></i>
                 </a>
             </div>
             

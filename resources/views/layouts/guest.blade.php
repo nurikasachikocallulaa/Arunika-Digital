@@ -56,6 +56,30 @@
                 <a href="{{ route('guest.home') }}#galeri" class="text-white/90 hover:text-white font-semibold transition">Galeri</a>
                 <a href="{{ route('guest.home') }}#kontak" class="text-white/90 hover:text-white font-semibold transition">Kontak</a>
 
+                @auth
+                    <div class="flex items-center gap-3 ml-4">
+                        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-sm">
+                            <i class="fas fa-user-circle text-white"></i>
+                            <span class="font-semibold">{{ auth()->user()->name }}</span>
+                        </div>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="px-3 py-1.5 rounded-full bg-red-500 text-white text-xs font-semibold hover:bg-red-600 transition">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                @else
+                    <a href="{{ route('login') }}" class="ml-4 px-4 py-1.5 rounded-full bg-white text-blue-700 text-sm font-semibold hover:bg-gray-100 transition flex items-center gap-2">
+                        <i class="fas fa-user"></i>
+                        <span>Login</span>
+                    </a>
+                    <a href="{{ route('register') }}" class="px-4 py-1.5 rounded-full border border-white/70 text-sm font-semibold text-white hover:bg-white/10 transition flex items-center gap-2">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Daftar</span>
+                    </a>
+                @endauth
+
                 <form action="{{ route('guest.search') }}" method="GET" class="flex items-center bg-white/10 rounded-full px-3 py-1 border border-white/20 text-sm">
                     <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari..." class="bg-transparent border-none focus:outline-none text-white placeholder-white/70 w-40">
                     <button type="submit" class="ml-2 text-white/90 hover:text-white">
@@ -84,6 +108,34 @@
                     <i class="fas fa-search"></i>
                 </button>
             </form>
+
+            @auth
+                <div class="pt-2 border-t border-white/20 mt-2 space-y-2">
+                    <div class="flex items-center justify-between text-sm">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-user-circle"></i>
+                            <span class="font-semibold">{{ auth()->user()->name }}</span>
+                        </div>
+                    </div>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="block w-full text-center bg-red-500 text-white font-semibold text-sm py-2 rounded-full">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            @else
+                <div class="pt-2 border-t border-white/20 mt-2 space-y-2">
+                    <a href="{{ route('login') }}" class="block w-full text-center bg-white text-blue-700 font-semibold text-sm py-2 rounded-full flex items-center justify-center gap-2">
+                        <i class="fas fa-user"></i>
+                        <span>Login</span>
+                    </a>
+                    <a href="{{ route('register') }}" class="block w-full text-center border border-white/70 font-semibold text-sm py-2 rounded-full text-white flex items-center justify-center gap-2">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Daftar</span>
+                    </a>
+                </div>
+            @endauth
         </div>
     </nav>
 

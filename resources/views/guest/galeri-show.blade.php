@@ -5,7 +5,7 @@
 <div class="max-w-5xl mx-auto p-6">
     <!-- Back Button -->
     <div class="mb-6">
-        <a href="{{ route('guest.galeri') }}" class="inline-flex items-center text-blue-600 hover:text-blue-700 font-semibold">
+        <a href="{{ url('/galeri') }}" class="inline-flex items-center text-blue-600 hover:text-blue-700 font-semibold">
             <i class="fas fa-arrow-left mr-2"></i>
             Kembali ke Galeri
         </a>
@@ -52,22 +52,38 @@
 
             <!-- Like & Comment Stats -->
             <div class="flex items-center gap-6 mb-6 pb-6 border-b">
-                <button onclick="toggleLike({{ $gallery->id }})" 
-                        class="flex items-center gap-2 hover:text-red-500 transition"
-                        id="like-btn-{{ $gallery->id }}">
-                    <i class="far fa-heart text-red-500 text-xl" id="like-icon-{{ $gallery->id }}"></i>
-                    <span class="text-gray-700 font-semibold" id="like-count-{{ $gallery->id }}">
-                        {{ $gallery->likes_count ?? 0 }} Likes
-                    </span>
-                </button>
-                <div class="flex items-center gap-2">
-                    <i class="far fa-comment text-blue-500 text-xl"></i>
-                    <span class="text-gray-700 font-semibold" id="comment-count-display-{{ $gallery->id }}">
-                        {{ $gallery->comments_count ?? 0 }} Komentar
-                    </span>
-                </div>
+                @auth
+                    <button onclick="toggleLike({{ $gallery->id }})" 
+                            class="flex items-center gap-2 hover:text-red-500 transition"
+                            id="like-btn-{{ $gallery->id }}">
+                        <i class="far fa-heart text-red-500 text-xl" id="like-icon-{{ $gallery->id }}"></i>
+                        <span class="text-gray-700 font-semibold" id="like-count-{{ $gallery->id }}">
+                            {{ $gallery->likes_count ?? 0 }} Likes
+                        </span>
+                    </button>
+                    <div class="flex items-center gap-2">
+                        <i class="far fa-comment text-blue-500 text-xl"></i>
+                        <span class="text-gray-700 font-semibold" id="comment-count-display-{{ $gallery->id }}">
+                            {{ $gallery->comments_count ?? 0 }} Komentar
+                        </span>
+                    </div>
+                @else
+                    <button onclick="window.location='{{ route('login') }}'" 
+                            class="flex items-center gap-2 hover:text-red-500 transition">
+                        <i class="far fa-heart text-red-500 text-xl"></i>
+                        <span class="text-gray-700 font-semibold">
+                            {{ $gallery->likes_count ?? 0 }} Likes
+                        </span>
+                    </button>
+                    <div class="flex items-center gap-2">
+                        <i class="far fa-comment text-blue-500 text-xl"></i>
+                        <span class="text-gray-700 font-semibold">
+                            {{ $gallery->comments_count ?? 0 }} Komentar
+                        </span>
+                    </div>
+                @endauth
                 @if($gallery->image)
-                <a href="{{ route('guest.galeri.download', $gallery->id) }}" 
+                <a href="{{ url('/galeri/' . $gallery->id . '/download') }}" 
                    class="flex items-center gap-2 hover:text-green-500 transition ml-auto"
                    download>
                     <i class="fas fa-download text-green-500 text-xl"></i>
@@ -82,7 +98,7 @@
                 
                 <!-- Comment Form for Guest -->
                 <div class="mb-6">
-                    <form id="comment-form-{{ $gallery->id }}" onsubmit="submitGuestComment(event, {{ $gallery->id }})">
+                        <form id="comment-form-{{ $gallery->id }}" onsubmit="submitGuestComment(event, {{ $gallery->id }})">
                         @guest
                             <div class="mb-3">
                                 <input 
@@ -100,17 +116,31 @@
                                     placeholder="Email Anda (opsional)">
                             </div>
                         @endguest
-                        <textarea 
-                            id="comment-input-{{ $gallery->id }}"
-                            rows="3" 
-                            class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="Tulis komentar..."
-                            required></textarea>
-                        <button type="submit" 
-                                class="mt-2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
-                            Kirim Komentar
-                        </button>
-                    </form>
+                            <textarea 
+                                id="comment-input-{{ $gallery->id }}"
+                                rows="3" 
+                                class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Tulis komentar..."
+                                required></textarea>
+                            <button type="submit" 
+                                    class="mt-2 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                                Kirim Komentar
+                            </button>
+                        </form>
+                    @else
+                        <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-4">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-info-circle text-blue-400 text-xl"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm text-blue-700">
+                                        Silakan <a href="{{ route('login') }}" class="font-semibold text-blue-700 hover:text-blue-800">login</a> untuk memberikan like dan komentar.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    @endauth
                 </div>
 
                 <!-- Comments List -->
@@ -183,7 +213,7 @@ function toggleLike(galleryId) {
     .catch(error => console.error('Error:', error));
 }
 
-// Submit Guest Comment
+// Submit Comment
 function submitGuestComment(event, galleryId) {
     event.preventDefault();
     
@@ -192,31 +222,24 @@ function submitGuestComment(event, galleryId) {
     
     if (!comment) return;
     
-    // Check if user is guest or authenticated
-    @auth
-        // Authenticated user
-        fetch(`/gallery/${galleryId}/comments`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ comment: comment })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    @else
-        // Guest user
+    // Show loading state
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.innerHTML;
+    submitButton.disabled = true;
+    submitButton.innerHTML = 'Mengirim...';
+    
+    // Check if user is guest
+    const isGuest = document.getElementById(`guest-name-${galleryId}`) !== null;
+    
+    if (isGuest) {
+        // Handle guest comment
         const guestName = document.getElementById(`guest-name-${galleryId}`).value.trim();
         const guestEmail = document.getElementById(`guest-email-${galleryId}`).value.trim();
         
         if (!guestName) {
             alert('Mohon isi nama Anda');
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
             return;
         }
         
@@ -224,27 +247,74 @@ function submitGuestComment(event, galleryId) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
             },
             body: JSON.stringify({ 
                 comment: comment,
                 guest_name: guestName,
-                guest_email: guestEmail
+                guest_email: guestEmail,
+                _token: '{{ csrf_token() }}'
             })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw err; });
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.success) {
                 location.reload();
             } else {
-                alert(data.message || 'Gagal mengirim komentar');
+                throw new Error(data.message || 'Gagal mengirim komentar');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Terjadi kesalahan saat mengirim komentar');
+            alert(error.message || 'Terjadi kesalahan saat mengirim komentar');
+        })
+        .finally(() => {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
         });
-    @endauth
+    } else {
+        // Handle authenticated user comment
+        fetch(`/gallery/${galleryId}/comments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ 
+                comment: comment,
+                _token: '{{ csrf_token() }}'
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw err; });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                commentInput.value = '';
+                location.reload();
+            } else {
+                throw new Error(data.message || 'Gagal mengirim komentar');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert(error.message || 'Terjadi kesalahan saat mengirim komentar');
+        })
+        .finally(() => {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+        });
+    }
 }
 
 // Initialize like state on page load (for both auth and guest)

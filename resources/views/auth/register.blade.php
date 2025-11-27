@@ -79,10 +79,10 @@
                 Daftar
             </button>
 
-            <!-- Login Link -->
+            <!-- Login Link Admin -->
             <div class="text-center mt-6">
-                <p class="text-sm text-gray-500">Sudah punya akun? 
-                    <a href="{{ route('login') }}" class="font-medium text-blue-600 hover:text-blue-800 transition-colors">
+                <p class="text-sm text-gray-500">Sudah punya akun admin? 
+                    <a href="{{ route('admin.login') }}" class="font-medium text-blue-600 hover:text-blue-800 transition-colors">
                         Masuk Sekarang
                     </a>
                 </p>

@@ -69,19 +69,32 @@
                                 
                                 <!-- Like & Comment Stats (Clickable) -->
                                 <div class="flex items-center gap-4 text-sm">
-                                    <button onclick="event.stopPropagation(); toggleLike({{ $gallery->id }})" 
-                                            class="flex items-center gap-1 hover:text-red-500 transition"
-                                            id="like-btn-{{ $gallery->id }}">
-                                        <i class="far fa-heart text-red-500" id="like-icon-{{ $gallery->id }}"></i>
-                                        <span class="text-gray-700" id="like-count-{{ $gallery->id }}">{{ $gallery->likes_count ?? 0 }} Likes</span>
-                                    </button>
-                                    <button onclick="event.stopPropagation(); showInstagramComments({{ $gallery->id }})" 
-                                            class="flex items-center gap-1 hover:text-blue-500 transition">
-                                        <i class="far fa-comment text-blue-500"></i>
-                                        <span class="text-gray-700" id="comment-count-display-{{ $gallery->id }}">{{ $gallery->comments_count ?? 0 }} Komentar</span>
-                                    </button>
+                                    @auth
+                                        <button onclick="event.stopPropagation(); toggleLike({{ $gallery->id }})" 
+                                                class="flex items-center gap-1 hover:text-red-500 transition"
+                                                id="like-btn-{{ $gallery->id }}">
+                                            <i class="far fa-heart text-red-500" id="like-icon-{{ $gallery->id }}"></i>
+                                            <span class="text-gray-700" id="like-count-{{ $gallery->id }}">{{ $gallery->likes_count ?? 0 }} Likes</span>
+                                        </button>
+                                        <button onclick="event.stopPropagation(); showInstagramComments({{ $gallery->id }})" 
+                                                class="flex items-center gap-1 hover:text-blue-500 transition">
+                                            <i class="far fa-comment text-blue-500"></i>
+                                            <span class="text-gray-700" id="comment-count-display-{{ $gallery->id }}">{{ $gallery->comments_count ?? 0 }} Komentar</span>
+                                        </button>
+                                    @else
+                                        <button onclick="event.stopPropagation(); window.location='{{ route('login') }}'" 
+                                                class="flex items-center gap-1 hover:text-red-500 transition">
+                                            <i class="far fa-heart text-red-500"></i>
+                                            <span class="text-gray-700">{{ $gallery->likes_count ?? 0 }} Likes</span>
+                                        </button>
+                                        <button onclick="event.stopPropagation(); window.location='{{ route('login') }}'" 
+                                                class="flex items-center gap-1 hover:text-blue-500 transition">
+                                            <i class="far fa-comment text-blue-500"></i>
+                                            <span class="text-gray-700">{{ $gallery->comments_count ?? 0 }} Komentar</span>
+                                        </button>
+                                    @endauth
                                     @if($gallery->image)
-                                    <a href="{{ route('guest.galeri.download', $gallery->id) }}" 
+                                    <a href="{{ url('/galeri/' . $gallery->id . '/download') }}" 
                                        onclick="event.stopPropagation();"
                                        class="flex items-center gap-1 hover:text-green-500 transition ml-auto"
                                        title="Download Foto">
@@ -130,17 +143,30 @@
                         
                         <!-- Like & Comment Stats (Clickable) -->
                         <div class="flex items-center gap-4 text-sm">
-                            <button onclick="event.stopPropagation(); toggleLike({{ $gallery->id }})" 
-                                    class="flex items-center gap-1 hover:text-red-500 transition"
-                                    id="like-btn-{{ $gallery->id }}">
-                                <i class="far fa-heart text-red-500" id="like-icon-{{ $gallery->id }}"></i>
-                                <span class="text-gray-700" id="like-count-{{ $gallery->id }}">{{ $gallery->likes_count ?? 0 }} Likes</span>
-                            </button>
-                            <button onclick="event.stopPropagation(); showInstagramComments({{ $gallery->id }})" 
-                                    class="flex items-center gap-1 hover:text-blue-500 transition">
-                                <i class="far fa-comment text-blue-500"></i>
-                                <span class="text-gray-700" id="comment-count-display-{{ $gallery->id }}">{{ $gallery->comments_count ?? 0 }} Komentar</span>
-                            </button>
+                            @auth
+                                <button onclick="event.stopPropagation(); toggleLike({{ $gallery->id }})" 
+                                        class="flex items-center gap-1 hover:text-red-500 transition"
+                                        id="like-btn-{{ $gallery->id }}">
+                                    <i class="far fa-heart text-red-500" id="like-icon-{{ $gallery->id }}"></i>
+                                    <span class="text-gray-700" id="like-count-{{ $gallery->id }}">{{ $gallery->likes_count ?? 0 }} Likes</span>
+                                </button>
+                                <button onclick="event.stopPropagation(); showInstagramComments({{ $gallery->id }})" 
+                                        class="flex items-center gap-1 hover:text-blue-500 transition">
+                                    <i class="far fa-comment text-blue-500"></i>
+                                    <span class="text-gray-700" id="comment-count-display-{{ $gallery->id }}">{{ $gallery->comments_count ?? 0 }} Komentar</span>
+                                </button>
+                            @else
+                                <button onclick="event.stopPropagation(); window.location='{{ route('login') }}'" 
+                                        class="flex items-center gap-1 hover:text-red-500 transition">
+                                    <i class="far fa-heart text-red-500"></i>
+                                    <span class="text-gray-700">{{ $gallery->likes_count ?? 0 }} Likes</span>
+                                </button>
+                                <button onclick="event.stopPropagation(); window.location='{{ route('login') }}'" 
+                                        class="flex items-center gap-1 hover:text-blue-500 transition">
+                                    <i class="far fa-comment text-blue-500"></i>
+                                    <span class="text-gray-700">{{ $gallery->comments_count ?? 0 }} Komentar</span>
+                                </button>
+                            @endauth
                             @if($gallery->image)
                             <a href="{{ route('guest.galeri.download', $gallery->id) }}" 
                                onclick="event.stopPropagation();"
@@ -185,17 +211,30 @@
                 
                 <!-- Like & Comment in Lightbox -->
                 <div class="flex items-center gap-4 text-sm border-t pt-3">
-                    <button onclick="event.stopPropagation(); toggleLike(window.currentGalleryId)" 
-                            class="flex items-center gap-2 hover:text-red-500 transition"
-                            id="lightbox-like-btn">
-                        <i class="far fa-heart" id="lightbox-like-icon"></i>
-                        <span id="lightbox-like-count">0</span>
-                    </button>
-                    <button onclick="event.stopPropagation(); showComments(window.currentGalleryId)" 
-                            class="flex items-center gap-2 hover:text-blue-500 transition">
-                        <i class="far fa-comment"></i>
-                        <span id="lightbox-comment-count">0</span>
-                    </button>
+                    @auth
+                        <button onclick="event.stopPropagation(); toggleLike(window.currentGalleryId)" 
+                                class="flex items-center gap-2 hover:text-red-500 transition"
+                                id="lightbox-like-btn">
+                            <i class="far fa-heart" id="lightbox-like-icon"></i>
+                            <span id="lightbox-like-count">0</span>
+                        </button>
+                        <button onclick="event.stopPropagation(); showComments(window.currentGalleryId)" 
+                                class="flex items-center gap-2 hover:text-blue-500 transition">
+                            <i class="far fa-comment"></i>
+                            <span id="lightbox-comment-count">0</span>
+                        </button>
+                    @else
+                        <button onclick="event.stopPropagation(); window.location='{{ route('login') }}'" 
+                                class="flex items-center gap-2 hover:text-red-500 transition">
+                            <i class="far fa-heart"></i>
+                            <span id="lightbox-like-count">0</span>
+                        </button>
+                        <button onclick="event.stopPropagation(); window.location='{{ route('login') }}'" 
+                                class="flex items-center gap-2 hover:text-blue-500 transition">
+                            <i class="far fa-comment"></i>
+                            <span id="lightbox-comment-count">0</span>
+                        </button>
+                    @endauth
                 </div>
             </div>
         </div>
@@ -242,14 +281,25 @@
             <div class="border-t">
                 <!-- Like, Comment, Share Buttons -->
                 <div class="flex items-center gap-4 p-3 border-b">
-                    <button onclick="toggleLike(window.currentGalleryId)" 
-                            class="hover:opacity-60 transition transform active:scale-90"
-                            id="instagram-modal-like-btn">
-                        <i class="far fa-heart text-2xl" id="instagram-modal-like-icon"></i>
-                    </button>
-                    <button class="hover:opacity-60 transition transform active:scale-90">
-                        <i class="far fa-comment text-2xl"></i>
-                    </button>
+                    @auth
+                        <button onclick="toggleLike(window.currentGalleryId)" 
+                                class="hover:opacity-60 transition transform active:scale-90"
+                                id="instagram-modal-like-btn">
+                            <i class="far fa-heart text-2xl" id="instagram-modal-like-icon"></i>
+                        </button>
+                        <button class="hover:opacity-60 transition transform active:scale-90">
+                            <i class="far fa-comment text-2xl"></i>
+                        </button>
+                    @else
+                        <button onclick="window.location='{{ route('login') }}'" 
+                                class="hover:opacity-60 transition transform active:scale-90">
+                            <i class="far fa-heart text-2xl"></i>
+                        </button>
+                        <button onclick="window.location='{{ route('login') }}'" 
+                                class="hover:opacity-60 transition transform active:scale-90">
+                            <i class="far fa-comment text-2xl"></i>
+                        </button>
+                    @endauth
                     <button onclick="shareGallery(window.currentGalleryId)" 
                             class="hover:opacity-60 transition transform active:scale-90">
                         <i class="far fa-paper-plane text-2xl"></i>
@@ -287,24 +337,9 @@
                     </div>
                 </div>
                 @else
-                <div class="p-4 border-t">
-                    <div class="mb-3">
-                        <input type="text" 
-                               id="guestCommentName" 
-                               class="w-full border rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
-                               placeholder="Nama Anda">
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <textarea id="guestCommentText" 
-                                  class="flex-1 resize-none focus:outline-none text-sm border rounded-lg p-2" 
-                                  rows="2" 
-                                  placeholder="Tulis komentar..."
-                                  onkeypress="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); submitGuestComment(event); }"></textarea>
-                        <button onclick="submitGuestComment(event)" 
-                                class="text-blue-500 font-semibold hover:text-blue-700 text-sm px-3">
-                            Kirim
-                        </button>
-                    </div>
+                <div class="p-4 border-t text-center text-sm text-gray-600">
+                    Untuk menyukai dan berkomentar, silakan 
+                    <a href="{{ route('login') }}" class="text-blue-600 font-semibold hover:underline">login terlebih dahulu</a>.
                 </div>
                 @endauth
             </div>

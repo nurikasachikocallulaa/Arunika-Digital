@@ -47,7 +47,7 @@
                 @else
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                         @foreach($galleryResults as $gallery)
-                            <a href="{{ route('guest.galeri.show', $gallery->id) }}" class="block bg-white rounded-lg shadow hover:shadow-md transition overflow-hidden">
+                            <a href="{{ url('/galeri/' . $gallery->id) }}" class="block bg-white rounded-lg shadow hover:shadow-md transition overflow-hidden">
                                 @if($gallery->image)
                                     <img src="{{ asset('storage/'.$gallery->image) }}" alt="{{ $gallery->title }}" class="w-full h-28 object-cover">
                                 @endif

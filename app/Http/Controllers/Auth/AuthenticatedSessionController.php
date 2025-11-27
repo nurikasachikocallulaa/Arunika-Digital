@@ -16,7 +16,12 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('auth.login');
+        // Gunakan view berbeda untuk login user dan admin
+        if (request()->routeIs('admin.login')) {
+            return view('auth.login'); // Halaman login admin
+        }
+
+        return view('auth.user-login'); // Halaman login user biasa
     }
 
     /**
@@ -25,8 +30,10 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
+        
+        $user = $request->user();
 
-        if ($request->user() && $request->user()->status !== 'active') {
+        if ($user && $user->status !== 'active') {
             Auth::guard('web')->logout();
 
             return back()->withErrors([
@@ -34,9 +41,25 @@ class AuthenticatedSessionController extends Controller
             ])->onlyInput('email');
         }
 
+        // Jika login melalui /admin/login, pastikan user adalah admin
+        if ($request->routeIs('admin.login') && (!$user || !$user->is_admin)) {
+            Auth::guard('web')->logout();
+
+            return back()->withErrors([
+                'email' => 'Anda tidak memiliki akses sebagai admin.',
+            ])->onlyInput('email');
+        }
+
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // Redirect berdasarkan role user
+        if ($user->is_admin) {
+            // Jika admin, arahkan ke dashboard admin
+            return redirect()->intended(route('dashboard', absolute: false));
+        }
+
+        // Jika user biasa, arahkan ke halaman guest
+        return redirect()->intended(route('guest.home'));
     }
 
     /**
